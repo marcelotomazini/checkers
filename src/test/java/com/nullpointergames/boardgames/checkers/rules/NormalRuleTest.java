@@ -30,16 +30,16 @@ public class NormalRuleTest extends RuleTest {
 	
 	@Before
 	public void setup() {
-		board.put(whitePiece(), new Position('b', 2));
+		board.put(whitePiece(), new Position('d', 4));
 	}
 
 	@Test
 	public void whiteMove() {
-		moveFrom('b', 2);
+		moveFrom('d', 4);
 		
 		assertThat(possibleMoves, hasSize(2));
-		assertThatCanMoveTo('a', 3);
-		assertThatCanMoveTo('c', 3);
+		assertThatCanMoveTo('c', 5);
+		assertThatCanMoveTo('e', 5);
 	}
 
 	@Test
@@ -53,13 +53,14 @@ public class NormalRuleTest extends RuleTest {
 
 	@Test
 	public void captureMove() {
-		putBlackPiece('a', 3);
-		putBlackPiece('c', 3);
+		putBlackPiece('c', 5);
+		putBlackPiece('b', 6);
+		putBlackPiece('e', 5);
 		
-		moveFrom('b', 2);
+		moveFrom('d', 4);
 		
 		assertThat(possibleMoves, hasSize(1));
-		assertThatCanMoveTo('d', 4);
+		assertThatCanMoveTo('f', 6);
 	}
 
 	@Test
@@ -75,11 +76,31 @@ public class NormalRuleTest extends RuleTest {
 	@Test
 	public void promotion() {
 		board.put(whitePiece(), new Position('b', 7));
-		Piece piece = board.getPiece(new Position('b', 7));
-		piece.setFirstMove(false);
 		
 		move('b', 7, 'a', 8);
 		assertThat(board.getPiece(new Position('a', 8)).type(), equalTo(KING));
+	}
+	
+	@Test
+	public void mustCapture() {
+		putBlackPiece('e', 5);
+		
+		moveFrom('d', 4);
+		
+		assertThat(possibleMoves, hasSize(1));
+		assertThatCanMoveTo('f', 6);
+	}
+	
+	@Test
+	public void mustMoveToCaptureMorePieces() {
+		putBlackPiece('e', 5);
+		putBlackPiece('e', 7);
+		putBlackPiece('c', 3);
+		
+		moveFrom('d', 4);
+		
+		assertThat(possibleMoves, hasSize(1));
+		assertThatCanMoveTo('c', 8);
 	}
 	
 	private void putWhitePiece(char col, int row) {

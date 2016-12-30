@@ -1,12 +1,12 @@
 package com.nullpointergames.boardgames.checkers.rules;
 
-import static com.nullpointergames.boardgames.PieceColor.NULL;
 import static com.nullpointergames.boardgames.checkers.PieceType.KING;
 import static java.lang.Math.abs;
 
 import java.util.List;
 
 import com.nullpointergames.boardgames.Board;
+import com.nullpointergames.boardgames.Move;
 import com.nullpointergames.boardgames.Piece;
 import com.nullpointergames.boardgames.Position;
 import com.nullpointergames.boardgames.Rule;
@@ -37,7 +37,7 @@ public class KingRule extends Rule {
 	}
 	
 	@Override
-	public List<Position> possibleMoves() {
+	public List<Move> possibleMoves() {
 		addPosition(+1, +1);
 		addPosition(+1, -1);
 		addPosition(-1, +1);
@@ -57,21 +57,21 @@ public class KingRule extends Rule {
 				
 				Piece anotherPiece = getPiece(board, (char)colTo, rowTo);
 				
-				if(anotherPiece.color() == NULL)
-					possibleMoves.add(newPosition((char)colTo, rowTo));
-				else {
-					if(anotherPiece.color() != color) {
-						colTo += colIncrement;
-						rowTo += rowIncrement;
-						
-						anotherPiece = getPiece(board, (char)colTo, rowTo);
-						
-						if(anotherPiece.color() == NULL)
-							possibleMoves.add(newPosition((char)colTo, rowTo));
-					} else {
-						return;
-					}
-				}
+//				if(anotherPiece.color() == NULL)
+//					possibleMoves.add(newPosition((char)colTo, rowTo));
+//				else {
+//					if(anotherPiece.color() != color) {
+//						colTo += colIncrement;
+//						rowTo += rowIncrement;
+//						
+//						anotherPiece = getPiece(board, (char)colTo, rowTo);
+//						
+//						if(anotherPiece.color() == NULL)
+//							possibleMoves.add(newPosition((char)colTo, rowTo));
+//					} else {
+//						return;
+//					}
+//				}
 			} catch (RuntimeException e) {
 				return;
 			}

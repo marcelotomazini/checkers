@@ -1,6 +1,7 @@
 package com.nullpointergames.boardgames;
 
 import static com.nullpointergames.boardgames.PieceColor.WHITE;
+import static java.lang.String.format;
 
 import com.nullpointergames.boardgames.checkers.PieceType;
 
@@ -44,5 +45,10 @@ public class Piece {
 
 	public void setFirstMove(boolean firstMove) {
 		this.firstMove = firstMove;
+	}
+	
+	@Override
+	public String toString() {
+		return format("%s %s", color, type);
 	}
 }

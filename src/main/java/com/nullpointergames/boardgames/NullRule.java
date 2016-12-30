@@ -14,7 +14,7 @@ public class NullRule extends Rule {
 	}
 
 	@Override
-	public List<Position> possibleMoves() {
+	public List<Move> possibleMoves() {
 		return emptyList();
 	}
 

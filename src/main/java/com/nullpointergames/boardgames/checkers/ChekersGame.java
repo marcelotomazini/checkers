@@ -15,6 +15,7 @@ import java.util.List;
 
 import com.nullpointergames.boardgames.Block;
 import com.nullpointergames.boardgames.Board;
+import com.nullpointergames.boardgames.Move;
 import com.nullpointergames.boardgames.Piece;
 import com.nullpointergames.boardgames.PieceColor;
 import com.nullpointergames.boardgames.Position;
@@ -70,7 +71,7 @@ public class ChekersGame implements TurnChangeListener {
 		return board.find(position);
 	}
 	
-	public List<Position> getPossibleMoves(Position from) {
+	public List<Move> getPossibleMoves(Position from) {
 		return RuleFactory.getRule(board, from).possibleMoves();
 	}
 	

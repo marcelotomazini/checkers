@@ -1,7 +1,6 @@
 package com.nullpointergames.boardgames;
 
 import static com.nullpointergames.boardgames.PieceColor.NULL;
-import static com.nullpointergames.boardgames.checkers.PieceType.KING;
 import static com.nullpointergames.boardgames.utils.MessageUtils.ILLEGAL_MOVE;
 import static com.nullpointergames.boardgames.utils.MessageUtils.getMessage;
 
@@ -9,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.nullpointergames.boardgames.checkers.PieceType;
-import com.nullpointergames.boardgames.checkers.RuleFactory;
 import com.nullpointergames.boardgames.checkers.exceptions.NoMoreMovesForThisDirection;
 
 public abstract class Rule {
@@ -19,7 +17,7 @@ public abstract class Rule {
 	protected static final int LAST_LINE_IN_THE_BOARD = 8;
 	protected static final int FIRST_LINE_IN_THE_BOARD = 1;
 	
-	protected final List<Position> possibleMoves = new ArrayList<>();
+	protected final List<Move> possibleMoves = new ArrayList<>();
 	private final List<TurnChangeListener> turnChangeListeners = new ArrayList<>();
 	
 	protected final Board board; 
@@ -33,25 +31,42 @@ public abstract class Rule {
 		this.color = from == null ? null : board.getPieceColor(from);
 	}
 	
-	public abstract List<Position> possibleMoves();
+	public abstract List<Move> possibleMoves();
 
 	public abstract PieceType pieceType();
 
 	protected Piece getPiece(Board board, Position position) {
-		return board.find(position).piece();
+		return board.getPiece(position);
 	}
 
 	protected Piece getPiece(Board board, char col, int row) {
 		return getPiece(board, new Position(col, row));
 	}
 
-	public void move(Position to) {
-		if(!possibleMoves().contains(to))
+	public void execute(Move move) {
+		if(!possibleMoves().contains(move))
 			throw new RuntimeException(getMessage(ILLEGAL_MOVE));
+		
+		moveWithoutVerification(move);
+	}
+	
+	public void move(Position to) {
+//		if(!possibleMoves().contains(to))
+//			throw new RuntimeException(getMessage(ILLEGAL_MOVE));
 		
 		moveWithoutVerification(to);
 	}
 	
+	public void moveWithoutVerification(Move move) {
+		Piece piece = board.getPiece(from);
+		board.put(piece, move.to());
+		board.clear(from);
+		piece.setFirstMove(false);
+		aditionalMoves(board, from, move.to());
+		if(canChangeTurn())
+			dispatchChangeTurn();
+	}
+
 	public void moveWithoutVerification(Position to) {
 		Piece piece = board.getPiece(from);
 		board.put(piece, to);
@@ -80,8 +95,8 @@ public abstract class Rule {
 	protected void addPosition(int col, int row) {
 		Piece anotherPiece = getPiece(board, (char)col, row);
 		
-		if (canMove(anotherPiece, col))
-			possibleMoves.add(newPosition((char)col, row));
+//		if (canMove(anotherPiece, col))
+//			possibleMoves.add(newPosition((char)col, row));
 		
 		if (anotherPiece.color() != NULL)
 			throw new NoMoreMovesForThisDirection();

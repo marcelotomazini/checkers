@@ -142,6 +142,19 @@ public class CheckersGameTest {
 		
 		assertThat(game.getTurn(), equalTo(BLACK));
 	}
+
+	@Test
+	public void canMoveOnlyToCapture() {
+		exception.expect(RuntimeException.class);
+		exception.expectMessage("Illegal move");
+		
+		move('c', 3, 'b', 4);
+		moveWithoutVerification('f', 6, 'e', 5);
+		move('g', 3, 'h', 4);
+		moveWithoutVerification('d', 6, 'c', 5);
+		move('b', 4, 'd', 6);
+		move('e', 3, 'f', 4);
+	}
 	
 	@Test
 	public void promotionMove() {
@@ -155,6 +168,18 @@ public class CheckersGameTest {
 		moveWithoutVerification('d', 6, 'c', 5);
 		move('b', 4, 'd', 6);
 		move('d', 6, 'f', 8);
+	}
+	
+	@Test
+	public void mustCapture() {
+		exception.expect(RuntimeException.class);
+		exception.expectMessage("Illegal move");
+		
+		move('c', 3, 'b', 4);
+		moveWithoutVerification('b', 6, 'c', 5);
+		move('g', 3, 'h', 4);
+		moveWithoutVerification('d', 6, 'e', 5);
+		move('b', 4, 'a', 5);
 	}
 	
 	private void verifyCheckAndCheckmate() {
