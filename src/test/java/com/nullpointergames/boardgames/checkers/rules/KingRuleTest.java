@@ -11,11 +11,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.nullpointergames.boardgames.Piece;
-import com.nullpointergames.boardgames.PieceColor;
 import com.nullpointergames.boardgames.Position;
 import com.nullpointergames.boardgames.Rule;
-import com.nullpointergames.boardgames.checkers.PieceType;
-import com.nullpointergames.boardgames.checkers.rules.KingRule;
 
 public class KingRuleTest extends RuleTest {
 
@@ -37,7 +34,7 @@ public class KingRuleTest extends RuleTest {
 		
 		moveFrom('d', 4);
 		
-		assertThat(possibleMoves, hasSize(9));
+		assertThat(possibleMoves, hasSize(10));
 		assertThatCanMoveTo('e', 5);
 		assertThatCanMoveTo('f', 6);
 		assertThatCanMoveTo('h', 8);
@@ -47,6 +44,7 @@ public class KingRuleTest extends RuleTest {
 		assertThatCanMoveTo('g', 1);
 		assertThatCanMoveTo('c', 3);
 		assertThatCanMoveTo('b', 2);
+		assertThatCanMoveTo('a', 7);
 	}
 	
 	private Piece whiteKing() {

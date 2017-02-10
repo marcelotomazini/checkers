@@ -51,10 +51,13 @@ public abstract class Rule {
 	}
 	
 	public void move(Position to) {
-//		if(!possibleMoves().contains(to))
-//			throw new RuntimeException(getMessage(ILLEGAL_MOVE));
-		
-		moveWithoutVerification(to);
+		for(Move move : possibleMoves())
+			if(move.to().equals(to)) {
+				moveWithoutVerification(to);
+				return;
+			}
+				
+		throw new RuntimeException(getMessage(ILLEGAL_MOVE));
 	}
 	
 	public void moveWithoutVerification(Move move) {

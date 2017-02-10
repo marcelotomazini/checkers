@@ -26,4 +26,9 @@ public class Move {
 	public int maxPiecesTaken() {
 		return takenPositions.size();
 	}
+	
+	@Override
+	public String toString() {
+		return from.toString() + " -> " + to.toString();
+	}
 }

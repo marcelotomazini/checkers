@@ -8,6 +8,7 @@ import java.util.List;
 import com.nullpointergames.boardgames.Board;
 import com.nullpointergames.boardgames.Move;
 import com.nullpointergames.boardgames.Piece;
+import com.nullpointergames.boardgames.PieceColor;
 import com.nullpointergames.boardgames.Position;
 import com.nullpointergames.boardgames.Rule;
 import com.nullpointergames.boardgames.checkers.PieceType;
@@ -56,6 +57,9 @@ public class KingRule extends Rule {
 				rowTo += rowIncrement;
 				
 				Piece anotherPiece = getPiece(board, (char)colTo, rowTo);
+				
+				if(anotherPiece.color() == PieceColor.NULL)
+					possibleMoves.add(new Move(from, newPosition((char)colTo, rowTo)));
 				
 //				if(anotherPiece.color() == NULL)
 //					possibleMoves.add(newPosition((char)colTo, rowTo));

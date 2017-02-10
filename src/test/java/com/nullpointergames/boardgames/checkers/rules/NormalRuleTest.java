@@ -99,8 +99,9 @@ public class NormalRuleTest extends RuleTest {
 		
 		moveFrom('d', 4);
 		
-		assertThat(possibleMoves, hasSize(1));
-		assertThatCanMoveTo('c', 8);
+		assertThat(possibleMoves, hasSize(2));
+		assertThatCanMoveTo('f', 6);
+		assertThatCanMoveTo('b', 2);
 	}
 	
 	private void putWhitePiece(char col, int row) {

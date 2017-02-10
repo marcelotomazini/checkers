@@ -17,11 +17,8 @@ import com.nullpointergames.boardgames.Piece;
 import com.nullpointergames.boardgames.Position;
 import com.nullpointergames.boardgames.Rule;
 import com.nullpointergames.boardgames.checkers.PieceType;
-import com.nullpointergames.boardgames.checkers.exceptions.NoMoreMovesForThisDirection;
 
 public class NormalRule extends Rule {
-
-	private List<Position> positionsTaken = new ArrayList<>();
 
 	public NormalRule(Board board, Position from) {
 		super(board, from);
@@ -48,7 +45,7 @@ public class NormalRule extends Rule {
 	
 	private void removeCapturedPiece(Position to) {
 		int x = from.row() - to.row();
-		if(abs(x) > 1) { //capturou peça
+		if(abs(x) > 1) { //piece's been taken
 			for(int i = from.col(); i < to.col(); i++) {
 				for(int j = from.row(); j < to.row(); j++) {
 					Position position = new Position((char)i, j);
@@ -85,12 +82,13 @@ public class NormalRule extends Rule {
 	}
 
 	private void verifyCapture(Position to) {
-//		List<Position> m = new NormalRule(board, to).possibleMoves();
-//		for(Position p : m) {
-//			int x = to.row() - p.row();
-//			if(abs(x) > 1)
-//				canChangeTurn = false;
-//		}
+		List<Move> moves = new NormalRule(board, to).possibleMoves();
+		for(Move m : moves) {
+			Position p = m.to();
+			int x = to.row() - p.row();
+			if(abs(x) > 1)
+				canChangeTurn = false;
+		}
 	}
 
 	@Override
@@ -101,28 +99,10 @@ public class NormalRule extends Rule {
 	
 	@Override
 	public List<Move> possibleMoves() {
-//		addMove();
-		
 		move(+1, +1);
 		move(+1, -1);
 		move(-1, +1);
 		move(-1, -1);
-		
-//		List<Position> possibleMovesFromOnePiece = new ArrayList<>();
-//		
-//		Position position = capture(+1, +1);
-//		while(position != null) {
-//			int rowTo = from.row() + 1;
-//			int colTo = abs(from.col()) + 1;
-//			
-//			Position positionTaken = newPosition((char)colTo, rowTo);
-//			
-//			positionsTaken.add(positionTaken);
-//			possibleMovesFromOnePiece.add(position);
-//			position = xxx(positionTaken, position);
-//		}
-		
-		
 		
 		capture(+1, +1);
 		capture(+1, -1);
@@ -145,161 +125,6 @@ public class NormalRule extends Rule {
 				possibleMoves.remove(move);
 	}
 
-	private void addMove() {
-		boolean canAddPositions = true;
-		int rowIncrement = 1;
-		int colIncrement = 1;
-		Piece previousPiece = null;
-		while(canAddPositions) {
-			try {
-				int rowTo = from.row() + rowIncrement++;
-				int colTo = abs(from.col()) + colIncrement++;
-				
-				Piece piece = board.getPiece(from);	
-				
-				int moveDirection = piece.color() == WHITE ? 1 : -1;
-				Piece anotherPiece;
-				
-				try {
-					anotherPiece = getPiece(board, (char)colTo, rowTo);
-				} catch (RuntimeException e) {
-					throw new NoMoreMovesForThisDirection();
-				}
-				
-				if(previousPiece != null)
-					continue;
-				
-				
-				if(anotherPiece.color() == NULL) {
-					if(from.row() - rowTo != moveDirection) {
-						Move move = new Move(from, newPosition((char)colTo, rowTo));
-						possibleMoves.add(move);
-						previousPiece = anotherPiece;
-					}
-				}		
-			} catch (NoMoreMovesForThisDirection e) {
-				canAddPositions = false;
-			}
-		}
-
-		canAddPositions = true;
-		rowIncrement = 1;
-		colIncrement = 1;
-		while(canAddPositions) {
-			try {
-				int rowTo = from.row() + rowIncrement++;
-				int colTo = abs(from.col()) + colIncrement--;
-				
-				Piece piece = board.getPiece(from);	
-				
-				int moveDirection = piece.color() == WHITE ? 1 : -1;
-				Piece anotherPiece;
-				
-				try {
-					anotherPiece = getPiece(board, (char)colTo, rowTo);
-				} catch (RuntimeException e) {
-					throw new NoMoreMovesForThisDirection();
-				}
-				
-				if(previousPiece != null)
-					continue;
-				
-				
-				if(anotherPiece.color() == NULL) {
-					if(from.row() - rowTo != moveDirection) {
-						Move move = new Move(from, newPosition((char)colTo, rowTo));
-						possibleMoves.add(move);
-						previousPiece = anotherPiece;
-					}
-				}		
-			} catch (NoMoreMovesForThisDirection e) {
-				canAddPositions = false;
-			}
-		}
-
-		canAddPositions = true;
-		rowIncrement = 1;
-		colIncrement = 1;
-		while(canAddPositions) {
-			try {
-				int rowTo = from.row() + rowIncrement--;
-				int colTo = abs(from.col()) + colIncrement--;
-				
-				Piece piece = board.getPiece(from);	
-				
-				int moveDirection = piece.color() == WHITE ? 1 : -1;
-				Piece anotherPiece;
-				
-				try {
-					anotherPiece = getPiece(board, (char)colTo, rowTo);
-				} catch (RuntimeException e) {
-					throw new NoMoreMovesForThisDirection();
-				}
-				
-				if(previousPiece != null)
-					continue;
-				
-				
-				if(anotherPiece.color() == NULL) {
-					if(from.row() - rowTo != moveDirection) {
-						Move move = new Move(from, newPosition((char)colTo, rowTo));
-						possibleMoves.add(move);
-						previousPiece = anotherPiece;
-					}
-				}		
-			} catch (NoMoreMovesForThisDirection e) {
-				canAddPositions = false;
-			}
-		}
-
-		canAddPositions = true;
-		rowIncrement = 1;
-		colIncrement = 1;
-		while(canAddPositions) {
-			try {
-				int rowTo = from.row() + rowIncrement--;
-				int colTo = abs(from.col()) + colIncrement++;
-				
-				Piece piece = board.getPiece(from);	
-				
-				int moveDirection = piece.color() == WHITE ? 1 : -1;
-				Piece anotherPiece;
-				
-				try {
-					anotherPiece = getPiece(board, (char)colTo, rowTo);
-				} catch (RuntimeException e) {
-					throw new NoMoreMovesForThisDirection();
-				}
-				
-				if(previousPiece != null)
-					continue;
-				
-				
-				if(anotherPiece.color() == NULL) {
-					if(from.row() - rowTo != moveDirection) {
-						Move move = new Move(from, newPosition((char)colTo, rowTo));
-						possibleMoves.add(move);
-						previousPiece = anotherPiece;
-					}
-				}		
-			} catch (NoMoreMovesForThisDirection e) {
-				canAddPositions = false;
-			}
-		}
-	}
-
-	private Position xxx(Position positionTaken, Position position) {
-		Board clone = board.clone();
-		Piece piece = clone.getPiece(from);
-		
-		clone.put(piece, position);
-		clone.clear(from);
-		piece.setFirstMove(false);
-		aditionalMoves(clone, from, positionTaken);
-
-		NormalRule normalRule = new NormalRule(clone, position);
-		return normalRule.capture(+1, +1);
-	}
 
 	public void promoteTo(Board board, PieceType pieceType) {
 		Position position = findPawnPositionToPromote(board);
